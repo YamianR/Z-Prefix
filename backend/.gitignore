@@ -1,0 +1,23 @@
+# Dependency directories
+/node_modules
+
+# Environment variables file (if you have one)
+.env
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+
+# Compiled binary files
+*.o
+*.out
+
+# Knex migration lock file
+knexfile.js.lock
