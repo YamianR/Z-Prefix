@@ -1,14 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const authenticate = require('./middleware/auth');
-// const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const knex = require('knex')(require('../knexfile.js')["development"]);
+const User = require('./models/User');
+const Item = require('./models/Item');
 
 const app = express();
 const port = 8080;
-
-const knex = require('knex')(require('../knexfile.js')["development"]);
-const User = require('./models/User');
 
 app.use(cors());
 app.use(express.json());
@@ -44,6 +43,82 @@ app.get('/user/profile', authenticate, async (req, res) => {
     res.send('Welcome to your profile');
 });
 
+
+// Create a new instance of the Item class
+const itemModel = new Item(knex);
+
+// Create Item (POST)
+app.post('/item', authenticate, async (req, res) => {
+    const { itemName, description, quantity } = req.body;
+    const userId = req.user.userId; // Get user ID from token
+    try {
+        await itemModel.create(userId, itemName, description, quantity);
+        res.status(201).send('Item created successfully');
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// Get All Items (GET)
+app.get('/items', async (req, res) => {
+    try {
+        const items = await itemModel.getAll();
+        res.json(items);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Get Item by ID (GET)
+app.get('/item/:id', async (req, res) => {
+    const itemId = req.params.id;
+    try {
+        const item = await itemModel.getById(itemId);
+        if (!item) {
+            res.status(404).send('Item not found');
+        } else {
+            res.json(item);
+        }
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Update Item (PUT)
+app.put('/item/:id', authenticate, async (req, res) => {
+    const itemId = req.params.id;
+    const { itemName, description, quantity } = req.body;
+    try {
+        const item = await itemModel.getById(itemId);
+        if (!item) {
+            res.status(404).send('Item not found');
+        } else {
+            await itemModel.update(itemId, itemName, description, quantity);
+            res.send('Item updated successfully');
+        }
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Delete Item (DELETE)
+app.delete('/item/:id', authenticate, async (req, res) => {
+    const itemId = req.params.id;
+    try {
+        const item = await itemModel.getById(itemId);
+        if (!item) {
+            res.status(404).send('Item not found');
+        } else {
+            await itemModel.delete(itemId);
+            res.send('Item deleted successfully');
+        }
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+// Basic functionality of app
 app.get('/', (req, res) => {
     res.send('Application is running');
 });
