@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const knex = require('knex')(require('../knexfile.js')["development"]);
 const User = require('./models/User');
 const Item = require('./models/Item');
+const faker = require('faker');
 
 const app = express();
 const port = 8080;
@@ -113,6 +114,34 @@ app.delete('/item/:id', authenticate, async (req, res) => {
             res.send('Item deleted successfully');
         }
     } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+function generateComputerPart() {
+    const itemName = faker.random.arrayElement(["CPU", "GPU", "RAM", "Motherboard", "SSD", "HDD", "Power Supply", "Case", "Cooler"]) + " Example";
+    const description = faker.lorem.sentence();
+    const quantity = faker.datatype.number({ min: 1, max: 20 });
+
+    return {
+        itemName,
+        description,
+        quantity
+    };
+}
+
+app.post('/generate-computer-parts', authenticate, async (req, res) => {
+    const userId = req.user.userId; // Get user ID from token
+    try {
+        for (let i = 0; i < 5; i++) {
+            const { itemName, description, quantity } = generateComputerPart();
+            await itemModel.create(userId, itemName, description, quantity);
+        }
+        res.status(201).send('Computer parts generated successfully');
+    } catch (error) {
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
