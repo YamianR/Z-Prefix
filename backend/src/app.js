@@ -34,6 +34,7 @@ app.post('/user/login', async (req, res) => {
     try {
         const user = await userModel.login(username, password);
         const token = jwt.sign({ userId: user.id }, 'your_secret_key');
+        res.setHeader('Content-Type', 'application/json');
         res.json({ token });
     } catch (error) {
         res.status(400).send(error.message);
@@ -64,6 +65,7 @@ app.post('/item', authenticate, async (req, res) => {
 app.get('/items', async (req, res) => {
     try {
         const items = await itemModel.getAll();
+        console.log('Items:', items); // Add this line for logging
         res.json(items);
     } catch (error) {
         res.status(500).send('Internal Server Error');
@@ -121,8 +123,13 @@ app.delete('/item/:id', authenticate, async (req, res) => {
 
 
 function generateComputerPart() {
-    const itemName = faker.random.arrayElement(["CPU", "GPU", "RAM", "Motherboard", "SSD", "HDD", "Power Supply", "Case", "Cooler"]) + " Example";
-    const description = faker.lorem.sentence();
+    function generateEnglishSentence(length) {
+        faker.locale = "en"; // Set Faker locale to English
+        return faker.lorem.sentence();
+    }
+
+    const itemName = faker.random.arrayElement(["CPU", "GPU", "RAM", "Motherboard", "SSD", "HDD", "Power Supply", "Case", "Cooler"]);
+    const description = generateEnglishSentence(30); // Adjust the desired length of the sentence here
     const quantity = faker.datatype.number({ min: 1, max: 20 });
 
     return {
@@ -135,7 +142,7 @@ function generateComputerPart() {
 app.post('/generate-computer-parts', authenticate, async (req, res) => {
     const userId = req.user.userId; // Get user ID from token
     try {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 20; i++) {
             const { itemName, description, quantity } = generateComputerPart();
             await itemModel.create(userId, itemName, description, quantity);
         }

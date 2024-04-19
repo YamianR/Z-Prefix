@@ -1,0 +1,38 @@
+import React, { useState } from 'react';
+
+const CreateItem = () => {
+  const [itemName, setItemName] = useState('');
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+  const handleCreateItem = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include JWT token
+        },
+        body: JSON.stringify({ itemName, description, quantity }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to create item');
+      }
+      // Redirect or perform other actions upon successful item creation
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Create Item</h2>
+      <input type="text" value={itemName} onChange={e => setItemName(e.target.value)} placeholder="Item Name" />
+      <input type="text" value={description} onChange={e => setDescription(e.target.value)} placeholder="Description" />
+      <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="Quantity" />
+      <button onClick={handleCreateItem}>Create Item</button>
+    </div>
+  );
+};
+
+export default CreateItem;
