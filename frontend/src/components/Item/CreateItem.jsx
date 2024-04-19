@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CreateItem = () => {
   const [itemName, setItemName] = useState('');
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState('');
+  const navigate = useNavigate();
 
   const handleCreateItem = async () => {
     try {
@@ -21,6 +23,8 @@ const CreateItem = () => {
       if (!response.ok) {
         throw new Error('Failed to create item');
       }
+
+      navigate('/user');
     } catch (error) {
       console.error(error);
     }

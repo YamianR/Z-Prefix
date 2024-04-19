@@ -26,6 +26,10 @@ class Item {
     async delete(itemId) {
         return await this.knex('item').where('id', itemId).del();
     }
+
+    async getByUserId(userId) {
+        return await this.knex('item').where('user_id', userId);
+    }
 }
 
 module.exports = Item;

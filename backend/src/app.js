@@ -41,8 +41,32 @@ app.post('/user/login', async (req, res) => {
     }
 });
 
+// Profile
 app.get('/user/profile', authenticate, async (req, res) => {
     res.send('Welcome to your profile');
+});
+
+// Add Item to User (POST)
+app.post('/user/add-item', authenticate, async (req, res) => {
+    const { itemName, description, quantity } = req.body;
+    const userId = req.user.userId; // Get user ID from token
+    try {
+        await itemModel.create(userId, itemName, description, quantity);
+        res.status(201).send('Item added to the user successfully');
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// Get User's Items (GET)
+app.get('/user/items', authenticate, async (req, res) => {
+    const userId = req.user.userId; // Get user ID from token
+    try {
+        const items = await itemModel.getByUserId(userId);
+        res.json(items);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
