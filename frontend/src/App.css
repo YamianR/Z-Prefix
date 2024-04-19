@@ -86,8 +86,6 @@ body {
 
 /* CSS for Login page */
 
-/* Login.css */
-
 .login-container {
   display: flex;
   flex-direction: column;
@@ -114,12 +112,12 @@ body {
 }
 
 .login-button {
-  width: 100%;
   padding: 10px 20px;
-  border: none;
+  border: 1px solid #fff;
   border-radius: 5px;
-  background-color: #333;
-  color: #fff;
+  background-color: #fff;
+  color: #333; 
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -132,8 +130,7 @@ body {
   color: red;
 }
 
-
-/* Register.css */
+/* CSS for Register page */
 
 .register-container {
   display: flex;
@@ -161,12 +158,12 @@ body {
 }
 
 .register-button {
-  width: 100%;
   padding: 10px 20px;
-  border: none;
+  border: 1px solid #fff;
   border-radius: 5px;
-  background-color: #333;
-  color: #fff;
+  background-color: #fff;
+  color: #333; 
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -177,4 +174,73 @@ body {
 
 .register-error {
   color: red;
+}
+
+/* CSS for User page */
+
+.user-page-container {
+  text-align: center;
+}
+
+.user-page-create-item {
+  margin-top: 20px;
+}
+
+.user-page-button {
+  padding: 10px 20px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-page-button:hover {
+  background-color: #ddd; 
+}
+
+/* CSS for Create Item page */
+
+.create-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.create-item-heading {
+  margin-bottom: 15px;
+}
+
+.create-item-content {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.create-item-input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.create-item-button {
+  padding: 10px 20px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-item-button:hover {
+  background-color: #ddd;
+  color: #555;
 }
